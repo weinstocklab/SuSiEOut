@@ -1,0 +1,29 @@
+Package: SuSiEOut
+Type: Package
+Title: SuSiE-OUT Fine-Mapping with Expanded Variant References
+Version: 0.2.0
+Authors@R: person("Josh", "Weinstock", role = c("aut", "cre"),
+    email = "josh.weinstock@emory.edu")
+Author: Josh Weinstock [aut, cre]
+Maintainer: Josh Weinstock <josh.weinstock@emory.edu>
+Description: Implements SuSiE-OUT, a sparse summary-statistic fine-mapping
+    model with L-invariant locus-level effect-count priors. A sparse effect can
+    be null, caused by a tested
+    variant, or caused by a variant outside the tested set that is represented
+    through its linkage disequilibrium pattern in an expanded whole-genome
+    sequencing panel.
+    Rank-one Bayes factors integrate normal-mixture effect priors, while
+    infinitesimal and linkage-disequilibrium mismatch covariance terms provide
+    explicit competing explanations for diffuse signal and reference error.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports:
+    graphics,
+    Matrix,
+    stats,
+    utils
+Suggests:
+    susieR,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
