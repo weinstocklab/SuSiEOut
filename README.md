@@ -1,10 +1,15 @@
 # SuSiEOut
 
 `SuSiEOut` implements SuSiE-OUT, a sparse summary-statistic fine-mapping method
-that allows causal variants to fall outside the tested variant set. Each single
-effect can be null, assigned to a tested variant, or assigned to an untested
-variant represented by its linkage disequilibrium (LD) pattern in an expanded
-whole-genome sequencing (WGS) reference.
+for loci where a causal variant may have been omitted from the tested set, for
+example by a minor allele frequency or SNP-only filter. Each single effect can
+be null, assigned to a tested variant, or assigned to an omitted variant (an
+OUT state). An omitted variant is represented by its linkage disequilibrium (LD)
+fingerprint: its LD with the tested variants, taken from a sequencing reference
+panel that contains it.
+
+In the code, arguments and fields named `examined_*` refer to tested variants,
+and `excluded_*` or `outside_*` refer to omitted variants.
 
 ## Installation
 
@@ -28,7 +33,7 @@ susieout_credible_sets(fit)
 ```
 
 The dense nuisance parameter is total local infinitesimal variance, not the
-coefficient placed directly on the z-score covariance. For `p` examined
+coefficient placed directly on the z-score covariance. For `p` tested
 variants and GWAS size `n`, `infinitesimal_variance = h2_dense` fits
 
 ```text
@@ -43,8 +48,8 @@ probabilities.
 The count prior is specified at the locus level. Changing `L` changes the
 numerical approximation but not the prior probability that the locus contains
 any sparse effect. `lambda_total` controls sparse-effect count and
-`out_fraction` controls how that count is divided between tested (IN) and
-excluded (OUT) candidates.
+`out_fraction` controls how that count is divided between tested variants and
+omitted variants (OUT states).
 
 Heterogeneous banks should not impose one sparse count or one positive dense
 variance on every locus. Spike-and-grid averaging combines sparse-count and
@@ -65,10 +70,10 @@ fit <- susieout_fit_grid(
 
 `susieout_train_prior(..., em_update = "nuisance_only")` provides a global EM
 diagnostic without feeding fitted OUT responsibilities back into the count
-prior. A zero `out_fraction` fits a candidate-complete model without WGS
-cross-LD.
+prior. A zero `out_fraction` fits a model that assumes no causal variant
+was omitted and needs no LD fingerprints.
 
 For large loci, `R_analysis` may be a `Matrix` sparse matrix. The sparse backend
-avoids forming the full examined-by-examined fingerprint matrix and supports the
+avoids forming the full tested-by-tested LD matrix in dense form and supports the
 `R + dI` nuisance covariance (`infinitesimal_variance = 0`). The accompanying
-scale audit covers 120 loci with 15,000 examined variants.
+scale audit covers 120 loci with 15,000 tested variants.

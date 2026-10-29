@@ -24,7 +24,7 @@ susieout_candidate_support <- function(fit) {
 #' SuSiE-OUT credible sets
 #'
 #' Credible sets are formed separately for each single-effect component and may
-#' contain examined or excluded WGS variants. Probabilities are normalized
+#' contain tested or omitted variants. Probabilities are normalized
 #' conditional on a non-null sparse effect; the returned `nonnull_probability`
 #' preserves the unconditional component support.
 #'
@@ -88,8 +88,8 @@ summary.susieout_fit <- function(object, ...) {
 print.summary.susieout_fit <- function(x, ...) {
     cat("SuSiE-OUT fine-mapping summary\n")
     cat("  backend:", x$backend, "\n")
-    cat("  variants:", x$examined_variants, "examined +",
-        x$excluded_variants, "excluded\n")
+    cat("  variants:", x$examined_variants, "tested +",
+        x$excluded_variants, "omitted\n")
     cat("  P(any causal omitted):",
         format(round(x$any_causal_omitted, 4), nsmall = 4), "\n")
     cat("  P(candidate set complete):",

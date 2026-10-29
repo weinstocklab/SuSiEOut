@@ -251,7 +251,7 @@ susieout_train_prior_grid <- function(
 
 #' Calibrate sparse-grid weights with masked-WGS targets
 #'
-#' Conditional fits use masked statistics only. Expanded-data PIPs enter only
+#' Conditional fits use masked statistics only. Reference PIPs from unfiltered fits enter only
 #' this across-locus hyperparameter calibration, and callers must keep
 #' calibration and evaluation loci disjoint.
 #'

@@ -21,8 +21,8 @@ susieout_fit_nuisance_grid_factorized(
 }
 \arguments{
 \item{z, n, examined_ids, effect_prior, L, count_prior, trained_prior}{Arguments analogous to \code{susieout_fit_nuisance_grid()}.}
-\item{examined_genotypes}{Reference dosage matrix for examined variants, with samples in rows.}
-\item{outside_genotypes}{Reference dosage matrix for excluded variants, with the same samples and ordering.}
+\item{examined_genotypes}{Reference dosage matrix for tested variants, with samples in rows.}
+\item{outside_genotypes}{Reference dosage matrix for omitted variants, with the same samples and ordering.}
 \item{excluded_ids}{IDs for columns of \code{outside_genotypes}.}
 \item{nuisance_prior}{Frozen grid prior from \code{susieout_train_nuisance_grid()}.}
 \item{ridge, max_iter, tol}{Numerical controls.}
@@ -31,6 +31,6 @@ susieout_fit_nuisance_grid_factorized(
 \description{
 An exact computational backend for LD matrices constructed from a finite
 reference panel. It uses one thin singular-value decomposition of the reference
-genotypes while fitting the same null, inside, outside, infinitesimal, and
+genotypes while fitting the same null, tested-variant, OUT, infinitesimal, and
 LD-mismatch states as \code{susieout_fit_nuisance_grid()}.
 }

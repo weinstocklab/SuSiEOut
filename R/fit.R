@@ -312,13 +312,13 @@
 
 #' Fit the SuSiE-OUT fine-mapping model
 #'
-#' @param z Examined-variant z scores.
+#' @param z Tested-variant z scores.
 #' @param n GWAS sample size.
-#' @param R_analysis Examined-variant analysis LD matrix. A `Matrix` sparse
+#' @param R_analysis Tested-variant analysis LD matrix. A `Matrix` sparse
 #'   matrix invokes the scalable `R + dI` backend.
 #' @param wgs_ld A cross-LD matrix or list containing `cross_ld`, optional
 #'   `R_SS`, and variant IDs/alleles.
-#' @param examined_ids IDs for examined variants.
+#' @param examined_ids IDs for tested variants.
 #' @param effect_prior A prior returned by [susieout_effect_prior()] or its name.
 #' @param L Maximum number of single-effect components.
 #' @param count_prior An L-invariant prior returned by
@@ -332,7 +332,7 @@
 #' @param max_iter Maximum IBSS sweeps.
 #' @param tol Maximum fitted-mean change required for convergence.
 #' @param initialization Variational initialization. `inside` greedily seeds
-#'   retained candidates; `mixed` seeds the combined IN/OUT dictionary.
+#'   tested variants; `mixed` seeds tested variants and OUT states together.
 #' @param trained_prior Optional frozen object from [susieout_train_prior()].
 #' @param inside_weights Optional within-set prior weights.
 #' @param outside_weights Optional within-set prior weights.
@@ -401,7 +401,7 @@ susieout_fit <- function(z, n, R_analysis, wgs_ld = NULL, examined_ids = NULL,
         wgs_ld, examined_ids, R_analysis, transform_wgs, ridge)
     q <- length(parsed_wgs$excluded_ids)
     if (q == 0L && prior_masses$outside > 0) {
-        stop("a positive OUT rate requires excluded WGS variants", call. = FALSE)
+        stop("a positive OUT rate requires omitted variants in the reference LD", call. = FALSE)
     }
     inside_weights <- inside_weights %||% rep(1, p)
     outside_weights <- outside_weights %||% rep(1, q)

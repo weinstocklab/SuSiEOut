@@ -19,16 +19,18 @@
 \alias{summary.susieout_fit}
 \title{SuSiE-OUT fine-mapping beyond the tested variant set}
 \description{
-Fits sparse summary-statistic fine-mapping models with explicit null, tested,
-and WGS-enumerated OUT states. Locus-level count-rate priors preserve their
+Fits sparse summary-statistic fine-mapping models with explicit null, tested-variant,
+and OUT states. OUT states represent variants omitted from the tested set by
+their LD fingerprints in a sequencing reference panel. Locus-level count-rate priors preserve their
 interpretation when the component limit changes. The package includes evolutionary
-effect mixtures, ridge-stabilized WGS LD transport, prior training, diagnostics,
+effect mixtures, ridge-stabilized reference-panel LD, prior training, diagnostics,
 credible sets, simulation utilities, and a batch command-line interface.
 }
 \details{
 See the package README and the accompanying manuscript for mathematical details
 and reproducible examples. Large SuSiE-OUT loci may provide a
 \code{Matrix} sparse analysis-LD matrix; this invokes the sparse
-\code{R + dI} covariance backend without materializing all inside
-fingerprints as a dense matrix.
+\code{R + dI} covariance backend without materializing all tested-variant
+fingerprints as a dense matrix. Arguments named \code{examined_*} refer to
+tested variants and \code{excluded_*} or \code{outside_*} to omitted variants.
 }

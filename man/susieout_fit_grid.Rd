@@ -35,7 +35,7 @@ susieout_calibrate_prior_grid(
 \item{starts}{Deterministic initialization strategies.}
 \item{keep_fits}{Whether to retain conditional fits.}
 \item{simulation_bank}{Full training loci.}
-\item{calibration_bank}{Masked-WGS conditional fits and expanded-PIP targets.}
+\item{calibration_bank}{Masked conditional fits and reference-PIP targets from unfiltered fits.}
 \item{iterations, anchor_strength, dirichlet_strength, tol}{Grid-weight training and calibration controls.}
 \item{...}{Additional arguments passed to \code{susieout_fit()}.}
 }

@@ -1,6 +1,6 @@
 #' Harmonize WGS cross-LD rows to analysis alleles
 #'
-#' @param cross_ld Examined-by-excluded cross-LD matrix.
+#' @param cross_ld Tested-by-omitted cross-LD matrix.
 #' @param wgs_examined Data frame with `id`, `effect_allele`, and `other_allele`.
 #' @param analysis_examined Data frame with the same columns in analysis order.
 #' @param allow_strand Whether unambiguous strand complements may be aligned.
@@ -19,7 +19,7 @@ susieout_harmonize_cross_ld <- function(cross_ld, wgs_examined,
         stop("allele-table IDs must be unique", call. = FALSE)
     }
     index <- match(analysis_examined$id, wgs_examined$id)
-    if (anyNA(index)) stop("WGS LD is missing examined analysis IDs", call. = FALSE)
+    if (anyNA(index)) stop("reference LD is missing tested variant IDs", call. = FALSE)
     cross_ld <- .susieout_validate_matrix(
         cross_ld, "cross_ld", nrow = nrow(wgs_examined))
     cross_ld <- cross_ld[index, , drop = FALSE]
@@ -103,14 +103,14 @@ susieout_transform_fingerprints <- function(R_analysis, R_wgs_SS, cross_ld,
             cross, wgs_ld$wgs_examined, wgs_ld$analysis_examined)
     } else if (!is.null(wgs_ld$examined_ids)) {
         index <- match(examined_ids, as.character(wgs_ld$examined_ids))
-        if (anyNA(index)) stop("WGS LD does not contain every examined ID", call. = FALSE)
+        if (anyNA(index)) stop("reference LD does not contain every tested variant ID", call. = FALSE)
         cross <- cross[index, , drop = FALSE]
     }
     cross <- .susieout_validate_matrix(cross, "wgs_ld$cross_ld", nrow = p)
     excluded_ids <- .susieout_validate_ids(
         wgs_ld$excluded_ids %||% colnames(cross), ncol(cross), "excluded_")
     if (length(intersect(examined_ids, excluded_ids))) {
-        stop("examined and excluded variant IDs must be disjoint", call. = FALSE)
+        stop("tested and omitted variant IDs must be disjoint", call. = FALSE)
     }
     R_wgs_SS <- wgs_ld$R_SS
     transformed <- cross
@@ -138,8 +138,8 @@ susieout_transform_fingerprints <- function(R_analysis, R_wgs_SS, cross_ld,
 #' Bootstrap WGS cross-LD fingerprints
 #'
 #' @param genotypes Individual-by-variant dosage matrix.
-#' @param examined Integer or character indices of examined variants.
-#' @param excluded Integer or character indices of excluded variants.
+#' @param examined Integer or character indices of tested variants.
+#' @param excluded Integer or character indices of omitted variants.
 #' @param B Number of bootstrap panels.
 #' @param seed Reproducibility seed.
 #' @return A list containing bootstrapped cross-LD matrices and uncertainty.
@@ -152,7 +152,7 @@ susieout_bootstrap_fingerprints <- function(genotypes, examined, excluded,
     excluded <- if (is.character(excluded)) match(excluded, colnames(genotypes)) else excluded
     if (anyNA(c(examined, excluded)) ||
         any(c(examined, excluded) < 1L | c(examined, excluded) > ncol(genotypes))) {
-        stop("examined and excluded variants must index genotype columns",
+        stop("tested and omitted variants must index genotype columns",
              call. = FALSE)
     }
     set.seed(seed)

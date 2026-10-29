@@ -30,7 +30,7 @@
     outside <- .susieout_standardize_genotypes(
         outside_genotypes, "outside_genotypes")
     if (nrow(examined) != nrow(outside)) {
-        stop("examined and outside genotypes must have the same samples",
+        stop("tested and omitted genotypes must have the same samples",
              call. = FALSE)
     }
     denominator <- sqrt(nrow(examined) - 1L)
@@ -260,14 +260,14 @@
 #'
 #' This is an exact computational backend for LD matrices constructed from a
 #' finite reference panel. It uses a single thin singular-value decomposition
-#' of the reference genotypes while fitting the same null, inside, outside,
+#' of the reference genotypes while fitting the same null, tested-variant, OUT,
 #' infinitesimal, and LD-mismatch states as [susieout_fit_nuisance_grid()].
 #'
 #' @param z,n,examined_ids,effect_prior,L,count_prior,trained_prior Arguments
 #'   analogous to [susieout_fit_nuisance_grid()].
-#' @param examined_genotypes Reference dosage matrix for examined variants,
+#' @param examined_genotypes Reference dosage matrix for tested variants,
 #'   with samples in rows.
-#' @param outside_genotypes Reference dosage matrix for excluded variants,
+#' @param outside_genotypes Reference dosage matrix for omitted variants,
 #'   with the same samples and ordering.
 #' @param excluded_ids IDs for columns of `outside_genotypes`.
 #' @param nuisance_prior Frozen grid prior from [susieout_train_nuisance_grid()].
