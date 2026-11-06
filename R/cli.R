@@ -1,6 +1,10 @@
 .susieout_parse_cli <- function(args) {
-    value <- list(L = 10L, lambda_total = 1, out_fraction = 0.10,
-                  summary = NULL)
+    value <- list(
+        L = 10L,
+        lambda_total = 1,
+        out_fraction = 0.10,
+        summary = NULL
+    )
     index <- 1L
     while (index <= length(args)) {
         key <- args[index]
@@ -9,15 +13,25 @@
             index <- index + 1L
             next
         }
-        if (index == length(args)) stop("missing value for ", key, call. = FALSE)
+        if (index == length(args)) {
+            stop("missing value for ", key, call. = FALSE)
+        }
         argument <- args[index + 1L]
-        if (key == "--input") value$input <- argument
-        else if (key == "--output") value$output <- argument
-        else if (key == "--summary") value$summary <- argument
-        else if (key == "--L") value$L <- as.integer(argument)
-        else if (key == "--lambda-total") value$lambda_total <- as.numeric(argument)
-        else if (key == "--out-fraction") value$out_fraction <- as.numeric(argument)
-        else stop("unknown argument: ", key, call. = FALSE)
+        if (key == "--input") {
+            value$input <- argument
+        } else if (key == "--output") {
+            value$output <- argument
+        } else if (key == "--summary") {
+            value$summary <- argument
+        } else if (key == "--L") {
+            value$L <- as.integer(argument)
+        } else if (key == "--lambda-total") {
+            value$lambda_total <- as.numeric(argument)
+        } else if (key == "--out-fraction") {
+            value$out_fraction <- as.numeric(argument)
+        } else {
+            stop("unknown argument: ", key, call. = FALSE)
+        }
         index <- index + 2L
     }
     value
@@ -34,18 +48,26 @@ susieout_cli <- function(args = commandArgs(trailingOnly = TRUE)) {
     if (isTRUE(options$help)) {
         cat(paste(
             "Usage: susieout --input LOCUS.rds --output FIT.rds",
-            paste("[--summary SUPPORT.tsv] [--L 10] [--lambda-total 1]",
-                  "[--out-fraction 0.10]\n")))
+            paste(
+                "[--summary SUPPORT.tsv] [--L 10] [--lambda-total 1]",
+                "[--out-fraction 0.10]\n"
+            )
+        ))
         return(invisible(0L))
     }
     if (is.null(options$input) || is.null(options$output)) {
         stop("--input and --output are required; use --help", call. = FALSE)
     }
     locus <- readRDS(options$input)
-    if (!is.list(locus)) stop("input RDS must contain a locus list", call. = FALSE)
+    if (!is.list(locus)) {
+        stop("input RDS must contain a locus list", call. = FALSE)
+    }
     locus$L <- locus$L %||% options$L
-    locus$count_prior <- locus$count_prior %||% susieout_count_prior(
-        options$lambda_total, options$out_fraction)
+    locus$count_prior <- locus$count_prior %||%
+        susieout_count_prior(
+            options$lambda_total,
+            options$out_fraction
+        )
     allowed <- names(formals(susieout_fit))
     arguments <- locus[intersect(names(locus), allowed)]
     fit <- do.call(susieout_fit, arguments)
@@ -54,8 +76,13 @@ susieout_cli <- function(args = commandArgs(trailingOnly = TRUE)) {
         support <- susieout_candidate_support(fit)
         support$locus_any_causal_omitted <- fit$any_causal_omitted
         support$candidate_set_complete <- fit$candidate_set_complete
-        utils::write.table(support, options$summary, sep = "\t", quote = FALSE,
-                           row.names = FALSE)
+        utils::write.table(
+            support,
+            options$summary,
+            sep = "\t",
+            quote = FALSE,
+            row.names = FALSE
+        )
     }
     invisible(0L)
 }
