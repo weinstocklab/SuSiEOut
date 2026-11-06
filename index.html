@@ -48,8 +48,11 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="susieout">SuSiEOut<a class="anchor" aria-label="anchor" href="#susieout"></a>
 </h1></div>
+<!-- badges: start -->
+
 <p><code>SuSiEOut</code> implements SuSiE-OUT, a sparse summary-statistic fine-mapping method for loci where a causal variant may have been omitted from the tested set, for example by a minor allele frequency or SNP-only filter. Each single effect can be null, assigned to a tested variant, or assigned to an omitted variant (an OUT state). An omitted variant is represented by its linkage disequilibrium (LD) fingerprint: its LD with the tested variants, taken from a sequencing reference panel that contains it.</p>
 <p>In the code, arguments and fields named <code>examined_*</code> refer to tested variants, and <code>excluded_*</code> or <code>outside_*</code> refer to omitted variants.</p>
+<p>Full documentation, with a reference page for every function, is at <a href="https://weinstocklab.github.io/SuSiEOut/" class="uri">https://weinstocklab.github.io/SuSiEOut/</a>.</p>
 <div class="section level2">
 <h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
 </h2>
@@ -79,7 +82,7 @@
 <pre class="text"><code>R + (n * h2_dense / p) R^2 + omega I.</code></pre>
 <p>This scaling lets the same local architecture be compared coherently across GWAS sample sizes. Fixed fits report both <code>local_h2</code> and the resulting <code>covariance_multiplier</code>; fixed variance fractions are not labeled posterior probabilities.</p>
 <p>The count prior is specified at the locus level. Changing <code>L</code> changes the numerical approximation but not the prior probability that the locus contains any sparse effect. <code>lambda_total</code> controls sparse-effect count and <code>out_fraction</code> controls how that count is divided between tested variants and omitted variants (OUT states).</p>
-<p>Heterogeneous banks should not impose one sparse count or one positive dense variance on every locus. Spike-and-grid averaging combines sparse-count and nuisance states using a comparable variational evidence:</p>
+<p>Heterogeneous banks should not impose one sparse count or one positive dense variance on every locus. Spike-and-grid averaging combines sparse-count and nuisance states using a comparable variational evidence. Here <code>training_loci</code> is a bank of loci with known causal variants, such as those from <code><a href="reference/susieout_simulate_locus.html">susieout_simulate_locus()</a></code>; see <code><a href="reference/susieout_train_prior.html">?susieout_train_prior</a></code> for the required format:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sparse_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/susieout_train_prior.html">susieout_train_prior</a></span><span class="op">(</span><span class="va">training_loci</span>, em_iterations <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="va">nuisance_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/susieout_train_nuisance_grid.html">susieout_train_nuisance_grid</a></span><span class="op">(</span></span>
@@ -92,7 +95,7 @@
 <span>    <span class="va">locus</span><span class="op">$</span><span class="va">examined_ids</span>, trained_prior <span class="op">=</span> <span class="va">sparse_prior</span>,</span>
 <span>    prior_grid <span class="op">=</span> <span class="va">prior_grid</span>, nuisance_prior <span class="op">=</span> <span class="va">nuisance_prior</span><span class="op">)</span></span></code></pre></div>
 <p><code>susieout_train_prior(..., em_update = "nuisance_only")</code> provides a global EM diagnostic without feeding fitted OUT responsibilities back into the count prior. A zero <code>out_fraction</code> fits a model that assumes no causal variant was omitted and needs no LD fingerprints.</p>
-<p>For large loci, <code>R_analysis</code> may be a <code>Matrix</code> sparse matrix. The sparse backend avoids forming the full tested-by-tested LD matrix in dense form and supports the <code>R + dI</code> nuisance covariance (<code>infinitesimal_variance = 0</code>). The accompanying scale audit covers 120 loci with 15,000 tested variants.</p>
+<p>For large loci, <code>R_analysis</code> may be a <code>Matrix</code> sparse matrix. The sparse backend avoids forming the full tested-by-tested LD matrix in dense form and supports the <code>R + dI</code> nuisance covariance (<code>infinitesimal_variance = 0</code>).</p>
 </div>
 <div class="section level2">
 <h2 id="contact">Contact<a class="anchor" aria-label="anchor" href="#contact"></a>
@@ -132,7 +135,14 @@
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/weinstocklab/SuSiEOut/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/weinstocklab/SuSiEOut/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://weinstocklab.github.io/SuSiEOut/"><img src="https://img.shields.io/badge/docs-pkgdown-blue.svg" alt="Documentation"></a></li>
+<li><a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License: MIT"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>

@@ -12,6 +12,9 @@ contains it.
 In the code, arguments and fields named `examined_*` refer to tested
 variants, and `excluded_*` or `outside_*` refer to omitted variants.
 
+Full documentation, with a reference page for every function, is at
+<https://weinstocklab.github.io/SuSiEOut/>.
+
 ## Acknowledgements
 
 SuSiE-OUT builds on the Sum of Single Effects (SuSiE) model of Wang,
@@ -69,7 +72,12 @@ variants and omitted variants (OUT states).
 Heterogeneous banks should not impose one sparse count or one positive
 dense variance on every locus. Spike-and-grid averaging combines
 sparse-count and nuisance states using a comparable variational
-evidence:
+evidence. Here `training_loci` is a bank of loci with known causal
+variants, such as those from
+[`susieout_simulate_locus()`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_simulate_locus.md);
+see
+[`?susieout_train_prior`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_train_prior.md)
+for the required format:
 
 ``` r
 
@@ -93,8 +101,7 @@ causal variant was omitted and needs no LD fingerprints.
 For large loci, `R_analysis` may be a `Matrix` sparse matrix. The sparse
 backend avoids forming the full tested-by-tested LD matrix in dense form
 and supports the `R + dI` nuisance covariance
-(`infinitesimal_variance = 0`). The accompanying scale audit covers 120
-loci with 15,000 tested variants.
+(`infinitesimal_variance = 0`).
 
 ## Contact
 
