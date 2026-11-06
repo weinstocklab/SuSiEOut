@@ -51,6 +51,32 @@ summary(fit)
 susieout_credible_sets(fit)
 ```
 
+### Locus plot
+
+`plot(fit)` draws a LocusZoom-style view of the locus (see
+`susieout_locuszoom()`): tested variants at their position, coloured by r² with
+the lead variant; the posterior inclusion probability of every tested (circle)
+and omitted (triangle) variant, filled by credible set; and an optional gene
+track. The subtitle reports the posterior probability that at least one causal
+variant was omitted. It needs the suggested packages `ggplot2` and `cowplot`.
+
+```r
+ids <- c(fit$examined_ids, fit$excluded_ids)
+positions <- setNames(1e6 + 2500 * seq_along(ids), ids)  # use real coordinates
+plot(fit, positions = positions)
+```
+
+<img src="man/figures/locuszoom.png" alt="Locus plot of a SuSiE-OUT fit" width="640">
+
+Here the causal variant of a simulated locus was omitted. Evidence spreads
+over its tested proxies and the omitted candidates (triangles) instead of
+concentrating on one variant, and the plot shows a 45% probability that a causal
+variant is missing. Positions of simulated loci are arbitrary.
+Pass `genes = ` a data frame with `gene_name`, `start` and `end` columns for a
+gene track; the `gencode` table from
+[gwasplot](https://github.com/weinstocklab/gwasplot), filtered to genes, has
+these columns.
+
 The dense nuisance parameter is total local infinitesimal variance, not the
 coefficient placed directly on the z-score covariance. For `p` tested
 variants and GWAS size `n`, `infinitesimal_variance = h2_dense` fits

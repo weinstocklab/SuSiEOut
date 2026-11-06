@@ -20,9 +20,10 @@ reference:
       - susieout_train_prior_grid
       - susieout_train_nuisance_grid
       - susieout_calibrate_prior_grid
-  - title: Summarizing fits
+  - title: Summarizing and plotting fits
     contents:
       - susieout_fit-methods
+      - susieout_locuszoom
       - susieout_candidate_support
       - susieout_credible_sets
   - title: LD fingerprints

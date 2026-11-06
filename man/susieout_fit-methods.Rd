@@ -15,7 +15,7 @@
 
 \method{print}{susieout_fit}(x, ...)
 
-\method{plot}{susieout_fit}(x, type = c("pip", "components"), top = 30L, ...)
+\method{plot}{susieout_fit}(x, type = c("locuszoom", "pip", "components"), top = 30L, ...)
 
 \method{predict}{susieout_fit}(
   object,
@@ -27,13 +27,16 @@
 \arguments{
 \item{object, x}{A \code{susieout_fit} object.}
 
-\item{...}{Further arguments passed to \code{\link[graphics:barplot]{graphics::barplot()}} by \code{plot()}
-and ignored otherwise.}
+\item{...}{For \code{plot()}, further arguments passed to
+\code{\link[=susieout_locuszoom]{susieout_locuszoom()}} (\code{type = "locuszoom"}, for example \code{positions} and
+\code{genes}) or to \code{\link[graphics:barplot]{graphics::barplot()}} (the other types). Ignored by the
+other methods.}
 
-\item{type}{For \code{plot()}, \code{"pip"} or \code{"components"}. For \code{predict()}, one of
-\code{"z"}, \code{"residual"}, \code{"candidate_support"}, or \code{"outside_probability"}.}
+\item{type}{For \code{plot()}, \code{"locuszoom"}, \code{"pip"} or \code{"components"}. For
+\code{predict()}, one of \code{"z"}, \code{"residual"}, \code{"candidate_support"}, or
+\code{"outside_probability"}.}
 
-\item{top}{Number of variants to show in the PIP plot.}
+\item{top}{Number of variants to show in the \code{"pip"} bar chart.}
 
 \item{newdata}{Optional fingerprint matrix with one column per tested and
 omitted variant; if supplied with \code{type = "z"}, the fitted effects are
@@ -47,9 +50,11 @@ a numeric vector, a data frame (for \code{"candidate_support"}), or a scalar
 }
 \description{
 \code{summary()} collects locus-level quantities and the ten best-supported
-variants; \code{print()} displays that summary. \code{plot()} draws either the
-highest PIPs, coloured by tested (blue) or omitted (orange) state, or the
-null, tested and OUT probabilities of each single-effect component.
+variants; \code{print()} displays that summary. \code{plot()} draws a locus plot
+(\code{\link[=susieout_locuszoom]{susieout_locuszoom()}}, the default when \pkg{ggplot2} and \pkg{cowplot}
+are installed), a bar chart of the highest PIPs coloured by tested (blue)
+or omitted (orange) state, or the null, tested and OUT probabilities of each
+single-effect component.
 \code{predict()} returns fitted z scores, residuals, variant support, or the
 probability that at least one causal variant was omitted.
 }
@@ -59,6 +64,6 @@ fit <- susieout_fit(
   locus$z, locus$n, locus$R_analysis, locus$wgs_ld, locus$examined_ids
 )
 summary(fit)
-plot(fit, top = 15)
+plot(fit, type = "pip", top = 15)
 predict(fit, type = "outside_probability")
 }

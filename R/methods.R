@@ -130,21 +130,26 @@ susieout_credible_sets <- function(fit, coverage = 0.95) {
 #' Summarize, print, plot, and predict from a SuSiE-OUT fit
 #'
 #' `summary()` collects locus-level quantities and the ten best-supported
-#' variants; `print()` displays that summary. `plot()` draws either the
-#' highest PIPs, coloured by tested (blue) or omitted (orange) state, or the
-#' null, tested and OUT probabilities of each single-effect component.
+#' variants; `print()` displays that summary. `plot()` draws a locus plot
+#' ([susieout_locuszoom()], the default when \pkg{ggplot2} and \pkg{cowplot}
+#' are installed), a bar chart of the highest PIPs coloured by tested (blue)
+#' or omitted (orange) state, or the null, tested and OUT probabilities of each
+#' single-effect component.
 #' `predict()` returns fitted z scores, residuals, variant support, or the
 #' probability that at least one causal variant was omitted.
 #'
 #' @param object,x A `susieout_fit` object.
-#' @param type For `plot()`, `"pip"` or `"components"`. For `predict()`, one of
-#'   `"z"`, `"residual"`, `"candidate_support"`, or `"outside_probability"`.
-#' @param top Number of variants to show in the PIP plot.
+#' @param type For `plot()`, `"locuszoom"`, `"pip"` or `"components"`. For
+#'   `predict()`, one of `"z"`, `"residual"`, `"candidate_support"`, or
+#'   `"outside_probability"`.
+#' @param top Number of variants to show in the `"pip"` bar chart.
 #' @param newdata Optional fingerprint matrix with one column per tested and
 #'   omitted variant; if supplied with `type = "z"`, the fitted effects are
 #'   projected onto it.
-#' @param ... Further arguments passed to [graphics::barplot()] by `plot()`
-#'   and ignored otherwise.
+#' @param ... For `plot()`, further arguments passed to
+#'   [susieout_locuszoom()] (`type = "locuszoom"`, for example `positions` and
+#'   `genes`) or to [graphics::barplot()] (the other types). Ignored by the
+#'   other methods.
 #' @return `summary()` returns an object of class `summary.susieout_fit`.
 #'   `print()` and `plot()` return their input invisibly. `predict()` returns
 #'   a numeric vector, a data frame (for `"candidate_support"`), or a scalar
@@ -156,7 +161,7 @@ susieout_credible_sets <- function(fit, coverage = 0.95) {
 #'   locus$z, locus$n, locus$R_analysis, locus$wgs_ld, locus$examined_ids
 #' )
 #' summary(fit)
-#' plot(fit, top = 15)
+#' plot(fit, type = "pip", top = 15)
 #' predict(fit, type = "outside_probability")
 NULL
 
@@ -228,12 +233,20 @@ print.susieout_fit <- function(x, ...) {
 #' @export
 plot.susieout_fit <- function(
     x,
-    type = c("pip", "components"),
+    type = c("locuszoom", "pip", "components"),
     top = 30L,
     ...
 ) {
-    type <- match.arg(type)
-    if (type == "pip") {
+    if (missing(type)) {
+        can_plot <- requireNamespace("ggplot2", quietly = TRUE) &&
+            requireNamespace("cowplot", quietly = TRUE)
+        type <- if (can_plot) "locuszoom" else "pip"
+    } else {
+        type <- match.arg(type)
+    }
+    if (type == "locuszoom") {
+        print(susieout_locuszoom(x, ...))
+    } else if (type == "pip") {
         support <- utils::head(susieout_candidate_support(x), top)
         colors <- ifelse(support$state == "inside", "#2B6CB0", "#C05621")
         graphics::barplot(
