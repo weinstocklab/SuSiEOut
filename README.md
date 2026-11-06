@@ -1,5 +1,11 @@
 # SuSiEOut
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/weinstocklab/SuSiEOut/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/weinstocklab/SuSiEOut/actions/workflows/R-CMD-check.yaml)
+[![Documentation](https://img.shields.io/badge/docs-pkgdown-blue.svg)](https://weinstocklab.github.io/SuSiEOut/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+<!-- badges: end -->
+
 `SuSiEOut` implements SuSiE-OUT, a sparse summary-statistic fine-mapping method
 for loci where a causal variant may have been omitted from the tested set, for
 example by a minor allele frequency or SNP-only filter. Each single effect can
@@ -10,6 +16,9 @@ panel that contains it.
 
 In the code, arguments and fields named `examined_*` refer to tested variants,
 and `excluded_*` or `outside_*` refer to omitted variants.
+
+Full documentation, with a reference page for every function, is at
+<https://weinstocklab.github.io/SuSiEOut/>.
 
 ## Acknowledgements
 
@@ -63,7 +72,10 @@ omitted variants (OUT states).
 
 Heterogeneous banks should not impose one sparse count or one positive dense
 variance on every locus. Spike-and-grid averaging combines sparse-count and
-nuisance states using a comparable variational evidence:
+nuisance states using a comparable variational evidence. Here `training_loci`
+is a bank of loci with known causal variants, such as those from
+`susieout_simulate_locus()`; see `?susieout_train_prior` for the required
+format:
 
 ```r
 sparse_prior <- susieout_train_prior(training_loci, em_iterations = 0)
@@ -85,8 +97,7 @@ was omitted and needs no LD fingerprints.
 
 For large loci, `R_analysis` may be a `Matrix` sparse matrix. The sparse backend
 avoids forming the full tested-by-tested LD matrix in dense form and supports the
-`R + dI` nuisance covariance (`infinitesimal_variance = 0`). The accompanying
-scale audit covers 120 loci with 15,000 tested variants.
+`R + dI` nuisance covariance (`infinitesimal_variance = 0`).
 
 ## Contact
 
