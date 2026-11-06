@@ -3,12 +3,15 @@
 [`summary()`](https://rdrr.io/r/base/summary.html) collects locus-level
 quantities and the ten best-supported variants;
 [`print()`](https://rdrr.io/r/base/print.html) displays that summary.
-[`plot()`](https://rdrr.io/r/graphics/plot.default.html) draws either
-the highest PIPs, coloured by tested (blue) or omitted (orange) state,
-or the null, tested and OUT probabilities of each single-effect
-component. [`predict()`](https://rdrr.io/r/stats/predict.html) returns
-fitted z scores, residuals, variant support, or the probability that at
-least one causal variant was omitted.
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html) draws a locus
+plot
+([`susieout_locuszoom()`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_locuszoom.md),
+the default when ggplot2 and cowplot are installed), a bar chart of the
+highest PIPs coloured by tested (blue) or omitted (orange) state, or the
+null, tested and OUT probabilities of each single-effect component.
+[`predict()`](https://rdrr.io/r/stats/predict.html) returns fitted z
+scores, residuals, variant support, or the probability that at least one
+causal variant was omitted.
 
 ## Usage
 
@@ -23,7 +26,7 @@ print(x, ...)
 print(x, ...)
 
 # S3 method for class 'susieout_fit'
-plot(x, type = c("pip", "components"), top = 30L, ...)
+plot(x, type = c("locuszoom", "pip", "components"), top = 30L, ...)
 
 # S3 method for class 'susieout_fit'
 predict(
@@ -42,21 +45,23 @@ predict(
 
 - ...:
 
-  Further arguments passed to
-  [`graphics::barplot()`](https://rdrr.io/r/graphics/barplot.html) by
-  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) and ignored
-  otherwise.
+  For [`plot()`](https://rdrr.io/r/graphics/plot.default.html), further
+  arguments passed to
+  [`susieout_locuszoom()`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_locuszoom.md)
+  (`type = "locuszoom"`, for example `positions` and `genes`) or to
+  [`graphics::barplot()`](https://rdrr.io/r/graphics/barplot.html) (the
+  other types). Ignored by the other methods.
 
 - type:
 
-  For [`plot()`](https://rdrr.io/r/graphics/plot.default.html), `"pip"`
-  or `"components"`. For
+  For [`plot()`](https://rdrr.io/r/graphics/plot.default.html),
+  `"locuszoom"`, `"pip"` or `"components"`. For
   [`predict()`](https://rdrr.io/r/stats/predict.html), one of `"z"`,
   `"residual"`, `"candidate_support"`, or `"outside_probability"`.
 
 - top:
 
-  Number of variants to show in the PIP plot.
+  Number of variants to show in the `"pip"` bar chart.
 
 - newdata:
 
@@ -101,7 +106,7 @@ summary(fit)
 #>         v46 outside 0.01817935                   0.001832987
 #>         v45 outside 0.01817332                   0.001832374
 #>         v39  inside 0.01703858                   0.001717069
-plot(fit, top = 15)
+plot(fit, type = "pip", top = 15)
 
 predict(fit, type = "outside_probability")
 #> [1] 0.1669364

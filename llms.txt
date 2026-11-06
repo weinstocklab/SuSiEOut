@@ -49,6 +49,35 @@ summary(fit)
 susieout_credible_sets(fit)
 ```
 
+### Locus plot
+
+`plot(fit)` draws a LocusZoom-style view of the locus (see
+[`susieout_locuszoom()`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_locuszoom.md)):
+tested variants at their position, coloured by r² with the lead variant;
+the posterior inclusion probability of every tested (circle) and omitted
+(triangle) variant, filled by credible set; and an optional gene track.
+The subtitle reports the posterior probability that at least one causal
+variant was omitted. It needs the suggested packages `ggplot2` and
+`cowplot`.
+
+``` r
+
+ids <- c(fit$examined_ids, fit$excluded_ids)
+positions <- setNames(1e6 + 2500 * seq_along(ids), ids)  # use real coordinates
+plot(fit, positions = positions)
+```
+
+![Locus plot of a SuSiE-OUT fit](reference/figures/locuszoom.png)
+
+Here the causal variant of a simulated locus was omitted. Evidence
+spreads over its tested proxies and the omitted candidates (triangles)
+instead of concentrating on one variant, and the plot shows a 45%
+probability that a causal variant is missing. Positions of simulated
+loci are arbitrary. Pass `genes =` a data frame with `gene_name`,
+`start` and `end` columns for a gene track; the `gencode` table from
+[gwasplot](https://github.com/weinstocklab/gwasplot), filtered to genes,
+has these columns.
+
 The dense nuisance parameter is total local infinitesimal variance, not
 the coefficient placed directly on the z-score covariance. For `p`
 tested variants and GWAS size `n`, `infinitesimal_variance = h2_dense`
@@ -142,7 +171,7 @@ Josh Weinstock (<josh.weinstock@emory.edu>). See our other work at
 - [`susieout_calibrate_prior_grid()`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_calibrate_prior_grid.md)
   : Calibrate sparse-grid weights with masked-WGS targets
 
-## Summarizing fits
+## Summarizing and plotting fits
 
 - [`summary(`*`<susieout_fit>`*`)`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_fit-methods.md)
   [`print(`*`<summary.susieout_fit>`*`)`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_fit-methods.md)
@@ -150,6 +179,8 @@ Josh Weinstock (<josh.weinstock@emory.edu>). See our other work at
   [`plot(`*`<susieout_fit>`*`)`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_fit-methods.md)
   [`predict(`*`<susieout_fit>`*`)`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_fit-methods.md)
   : Summarize, print, plot, and predict from a SuSiE-OUT fit
+- [`susieout_locuszoom()`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_locuszoom.md)
+  : LocusZoom-style plot of a SuSiE-OUT fit
 - [`susieout_candidate_support()`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_candidate_support.md)
   : Variant support under SuSiE-OUT
 - [`susieout_credible_sets()`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_credible_sets.md)

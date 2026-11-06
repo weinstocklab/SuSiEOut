@@ -32,7 +32,7 @@
 - [`susieout_calibrate_prior_grid()`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_calibrate_prior_grid.md)
   : Calibrate sparse-grid weights with masked-WGS targets
 
-## Summarizing fits
+## Summarizing and plotting fits
 
 - [`summary(`*`<susieout_fit>`*`)`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_fit-methods.md)
   [`print(`*`<summary.susieout_fit>`*`)`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_fit-methods.md)
@@ -40,6 +40,8 @@
   [`plot(`*`<susieout_fit>`*`)`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_fit-methods.md)
   [`predict(`*`<susieout_fit>`*`)`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_fit-methods.md)
   : Summarize, print, plot, and predict from a SuSiE-OUT fit
+- [`susieout_locuszoom()`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_locuszoom.md)
+  : LocusZoom-style plot of a SuSiE-OUT fit
 - [`susieout_candidate_support()`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_candidate_support.md)
   : Variant support under SuSiE-OUT
 - [`susieout_credible_sets()`](https://weinstocklab.github.io/SuSiEOut/reference/susieout_credible_sets.md)
