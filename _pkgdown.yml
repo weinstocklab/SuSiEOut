@@ -1,0 +1,37 @@
+url: https://weinstocklab.github.io/SuSiEOut/
+template:
+  bootstrap: 5
+
+reference:
+  - title: Fitting
+    contents:
+      - susieout_fit
+      - susieout_fit_grid
+      - susieout_fit_nuisance_grid
+      - susieout_fit_nuisance_grid_factorized
+  - title: Priors
+    contents:
+      - susieout_count_prior
+      - susieout_effect_prior
+      - susieout_prior_grid
+  - title: Training priors
+    contents:
+      - susieout_train_prior
+      - susieout_train_prior_grid
+      - susieout_train_nuisance_grid
+      - susieout_calibrate_prior_grid
+  - title: Summarizing fits
+    contents:
+      - susieout_fit-methods
+      - susieout_candidate_support
+      - susieout_credible_sets
+  - title: LD fingerprints
+    contents:
+      - susieout_candidate_mask
+      - susieout_harmonize_cross_ld
+      - susieout_transform_fingerprints
+      - susieout_bootstrap_fingerprints
+  - title: Simulation and command line
+    contents:
+      - susieout_simulate_locus
+      - susieout_cli

@@ -1,5 +1,20 @@
 #' Variant support under SuSiE-OUT
 #'
+#' Lists every tested variant and every omitted variant (OUT state) with its
+#' posterior inclusion probability (PIP), sorted from highest to lowest.
+#'
+#' @param fit A `susieout_fit` object from [susieout_fit()] or one of the
+#'   grid-averaged fitting functions.
+#' @return A data frame with columns `variant_id`, `state` (`"inside"` for
+#'   tested variants, `"outside"` for omitted variants), `pip`, and
+#'   `maximum_component_probability`, the largest probability that any single
+#'   effect assigns to the variant.
+#' @examples
+#' locus <- susieout_simulate_locus(1, architecture = "entirely_omitted")
+#' fit <- susieout_fit(
+#'   locus$z, locus$n, locus$R_analysis, locus$wgs_ld, locus$examined_ids
+#' )
+#' susieout_candidate_support(fit)[1:5, ]
 #' @export
 susieout_candidate_support <- function(fit) {
     if (!inherits(fit, "susieout_fit")) {
@@ -38,6 +53,21 @@ susieout_candidate_support <- function(fit) {
 #' conditional on a non-null sparse effect; the returned `nonnull_probability`
 #' preserves the unconditional component support.
 #'
+#' @param fit A `susieout_fit` object.
+#' @param coverage Target coverage of each credible set, in (0, 1).
+#' @return A list of class `susieout_credible_sets` with one data frame per
+#'   single-effect component. Each data frame lists the variants in the set
+#'   with their `state` (`"inside"` or `"outside"`), unconditional
+#'   `probability`, `conditional_probability` given a non-null effect, and
+#'   `cumulative` conditional probability. Components with no non-null support
+#'   give empty data frames. The coverage is stored as an attribute.
+#' @examples
+#' locus <- susieout_simulate_locus(1, architecture = "entirely_omitted")
+#' fit <- susieout_fit(
+#'   locus$z, locus$n, locus$R_analysis, locus$wgs_ld, locus$examined_ids
+#' )
+#' sets <- susieout_credible_sets(fit)
+#' Filter(nrow, sets)
 #' @export
 susieout_credible_sets <- function(fit, coverage = 0.95) {
     if (!inherits(fit, "susieout_fit")) {
@@ -97,6 +127,40 @@ susieout_credible_sets <- function(fit, coverage = 0.95) {
     )
 }
 
+#' Summarize, print, plot, and predict from a SuSiE-OUT fit
+#'
+#' `summary()` collects locus-level quantities and the ten best-supported
+#' variants; `print()` displays that summary. `plot()` draws either the
+#' highest PIPs, coloured by tested (blue) or omitted (orange) state, or the
+#' null, tested and OUT probabilities of each single-effect component.
+#' `predict()` returns fitted z scores, residuals, variant support, or the
+#' probability that at least one causal variant was omitted.
+#'
+#' @param object,x A `susieout_fit` object.
+#' @param type For `plot()`, `"pip"` or `"components"`. For `predict()`, one of
+#'   `"z"`, `"residual"`, `"candidate_support"`, or `"outside_probability"`.
+#' @param top Number of variants to show in the PIP plot.
+#' @param newdata Optional fingerprint matrix with one column per tested and
+#'   omitted variant; if supplied with `type = "z"`, the fitted effects are
+#'   projected onto it.
+#' @param ... Further arguments passed to [graphics::barplot()] by `plot()`
+#'   and ignored otherwise.
+#' @return `summary()` returns an object of class `summary.susieout_fit`.
+#'   `print()` and `plot()` return their input invisibly. `predict()` returns
+#'   a numeric vector, a data frame (for `"candidate_support"`), or a scalar
+#'   (for `"outside_probability"`).
+#' @name susieout_fit-methods
+#' @examples
+#' locus <- susieout_simulate_locus(1, architecture = "entirely_omitted")
+#' fit <- susieout_fit(
+#'   locus$z, locus$n, locus$R_analysis, locus$wgs_ld, locus$examined_ids
+#' )
+#' summary(fit)
+#' plot(fit, top = 15)
+#' predict(fit, type = "outside_probability")
+NULL
+
+#' @rdname susieout_fit-methods
 #' @export
 summary.susieout_fit <- function(object, ...) {
     support <- susieout_candidate_support(object)
@@ -117,6 +181,7 @@ summary.susieout_fit <- function(object, ...) {
     result
 }
 
+#' @rdname susieout_fit-methods
 #' @export
 print.summary.susieout_fit <- function(x, ...) {
     cat("SuSiE-OUT fine-mapping summary\n")
@@ -152,12 +217,14 @@ print.summary.susieout_fit <- function(x, ...) {
     invisible(x)
 }
 
+#' @rdname susieout_fit-methods
 #' @export
 print.susieout_fit <- function(x, ...) {
     print(summary(x), ...)
     invisible(x)
 }
 
+#' @rdname susieout_fit-methods
 #' @export
 plot.susieout_fit <- function(
     x,
@@ -200,6 +267,7 @@ plot.susieout_fit <- function(
     invisible(x)
 }
 
+#' @rdname susieout_fit-methods
 #' @export
 predict.susieout_fit <- function(
     object,

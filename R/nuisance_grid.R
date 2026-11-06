@@ -7,7 +7,7 @@
 #' global nuisance estimate need not be imposed on candidate-complete sparse
 #' loci.
 #'
-#' @param z,n,R_analysis,wgs_ld,examined_ids,effect_prior,L Arguments passed to
+#' @param z,n,R_analysis,wgs_ld,examined_ids,effect_prior,L,count_prior Arguments passed to
 #'   [susieout_fit()].
 #' @param infinitesimal_grid Grid of total local infinitesimal variances.
 #' @param ld_mismatch_grid Grid of independent mismatch variances.

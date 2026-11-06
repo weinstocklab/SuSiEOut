@@ -2,6 +2,20 @@
 #'
 #' @param variants Data frame containing `maf`, `variant_type`, `info`,
 #'   `reference_present`, and `panel_polymorphic`.
+#' @param maf_min Minimum minor allele frequency for a variant to be tested.
+#' @param snp_only If `TRUE`, only variants with `variant_type == "SNP"` are
+#'   tested.
+#' @param info_min Minimum imputation quality (`info`) for a variant to be
+#'   tested.
+#' @return A logical vector, `TRUE` for variants that pass every filter and
+#'   are therefore tested.
+#' @examples
+#' variants <- data.frame(
+#'   maf = c(0.2, 0.004, 0.3), variant_type = c("SNP", "SNP", "INDEL"),
+#'   info = c(0.95, 0.9, 0.99), reference_present = TRUE,
+#'   panel_polymorphic = TRUE
+#' )
+#' susieout_candidate_mask(variants)
 #' @export
 susieout_candidate_mask <- function(
     variants,
@@ -43,7 +57,35 @@ susieout_candidate_mask <- function(
 #' It represents recent growth through a rare-allele-enriched frequency draw,
 #' prospective causal assignment, derived-allele orientation, finite WGS
 #' panels, ancestry mismatch, and sparse/null/infinitesimal/LD-error regimes.
+#' Variants have first-order autoregressive LD, and a realistic mix of MAF,
+#' indel, imputation-quality, reference-absence and panel-monomorphism filters
+#' decides which variants are tested and which are omitted.
 #'
+#' @param seed Random seed; the same seed gives the same locus.
+#' @param p Number of tested variants.
+#' @param q Number of omitted variants.
+#' @param n GWAS sample size.
+#' @param wgs_n Size of the sequencing reference panel used to estimate LD
+#'   fingerprints.
+#' @param architecture Causal architecture: all causal variants tested
+#'   (`"contained"`), some or all omitted (`"partially_omitted"`,
+#'   `"entirely_omitted"`), no signal (`"null"`), diffuse polygenic signal
+#'   (`"infinitesimal"`), or reference LD error (`"ld_mismatch"`).
+#' @param evolution Selection regime used to draw effect sizes.
+#' @param ancestry Whether the reference panel matches the GWAS ancestry.
+#' @param causal_count,omitted_count Optional numbers of causal variants and
+#'   of omitted causal variants; defaults depend on `architecture`.
+#' @param oracle_wgs If `TRUE`, use population LD instead of a finite-panel
+#'   estimate.
+#' @param infinitesimal_h2,ld_mismatch_variance Optional polygenic variance and
+#'   LD-mismatch variance; defaults depend on `architecture`.
+#' @return A list with the arguments needed by [susieout_fit()] (`z`, `n`,
+#'   `R_analysis`, `wgs_ld`, `examined_ids`), the variant table `variants`,
+#'   full-locus `oracle` statistics, and the simulated `truth`.
+#' @examples
+#' locus <- susieout_simulate_locus(1, architecture = "entirely_omitted")
+#' locus$truth$causal
+#' locus$truth$any_omitted
 #' @export
 susieout_simulate_locus <- function(
     seed,

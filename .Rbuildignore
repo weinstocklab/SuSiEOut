@@ -1,0 +1,8 @@
+^air\.toml$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
+^\.Rproj\.user$
+^.*\.Rproj$
+^README\.Rmd$

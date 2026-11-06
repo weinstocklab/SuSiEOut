@@ -9,6 +9,8 @@
 #' @param lambda_total Nonnegative sparse-effect rate for the locus.
 #' @param out_fraction Fraction of sparse effects assigned to OUT candidates.
 #' @return A `susieout_count_prior` object.
+#' @examples
+#' susieout_count_prior(lambda_total = 1, out_fraction = 0.10)
 #' @export
 susieout_count_prior <- function(lambda_total = 1, out_fraction = 0.10) {
     if (

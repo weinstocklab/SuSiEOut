@@ -6,6 +6,8 @@
 #' @param architecture One of `robust_mixture`, `generic`, `neutral`,
 #'   `stabilizing`, or `directional`.
 #' @return A normalized list of normal-mixture weights, means, and variances.
+#' @examples
+#' str(susieout_effect_prior("robust_mixture"))
 #' @export
 susieout_effect_prior <- function(
     architecture = c(

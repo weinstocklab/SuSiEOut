@@ -41,7 +41,15 @@
 #'
 #' The input is an RDS list containing the named arguments of [susieout_fit()].
 #' The output is a complete fit RDS, with an optional tab-separated support file.
+#' The installed script `exec/susieout` calls this function.
 #'
+#' @param args Character vector of command-line arguments: `--input`,
+#'   `--output`, and optionally `--summary`, `--L`, `--lambda-total`, and
+#'   `--out-fraction`. Use `--help` for usage.
+#' @return Invisibly, `0` on success. The fit and optional support table are
+#'   written to the paths given.
+#' @examples
+#' susieout_cli("--help")
 #' @export
 susieout_cli <- function(args = commandArgs(trailingOnly = TRUE)) {
     options <- .susieout_parse_cli(args)

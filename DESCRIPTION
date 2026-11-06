@@ -27,3 +27,8 @@ Suggests:
     susieR,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+URL: https://github.com/weinstocklab/SuSiEOut,
+    https://weinstocklab.github.io/SuSiEOut/
+BugReports: https://github.com/weinstocklab/SuSiEOut/issues
+Roxygen: list(markdown = TRUE)
+Config/roxygen2/version: 8.1.0

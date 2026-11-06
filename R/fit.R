@@ -463,7 +463,34 @@
 #' @param inside_weights Optional within-set prior weights.
 #' @param outside_weights Optional within-set prior weights.
 #' @param ... Reserved; extra arguments are rejected.
-#' @return An object of class `susieout_fit`.
+#' @return An object of class `susieout_fit`, a list that includes:
+#'   * `pip_in`, `pip_out`: PIPs for tested variants and for omitted variants
+#'     (OUT PIPs).
+#'   * `alpha_in`, `alpha_out`: per-component assignment probabilities.
+#'   * `any_causal_omitted`: posterior probability that at least one sparse
+#'     effect is assigned to an omitted variant (locus OUT support), and
+#'     `candidate_set_complete`, its complement.
+#'   * `component_null`, `component_outside`: per-component null and OUT
+#'     probabilities.
+#'   * `fitted`, `residual`: fitted and residual z scores.
+#'   * `infinitesimal`, `ld_mismatch`: nuisance variance settings.
+#'   * `diagnostics`: convergence and numerical diagnostics.
+#'
+#'   Use [susieout_candidate_support()], [susieout_credible_sets()] and
+#'   [summary()][susieout_fit-methods] to summarize it.
+#' @references
+#' Wang G, Sarkar A, Carbonetto P, Stephens M (2020). A simple new approach
+#' to variable selection in regression, with application to genetic fine
+#' mapping. *Journal of the Royal Statistical Society: Series B* 82,
+#' 1273--1300.
+#' @examples
+#' locus <- susieout_simulate_locus(1, architecture = "entirely_omitted")
+#' fit <- susieout_fit(
+#'   locus$z, locus$n, locus$R_analysis, locus$wgs_ld, locus$examined_ids,
+#'   L = 10, count_prior = susieout_count_prior(1, out_fraction = 0.10)
+#' )
+#' fit$any_causal_omitted
+#' head(susieout_candidate_support(fit))
 #' @export
 susieout_fit <- function(
     z,

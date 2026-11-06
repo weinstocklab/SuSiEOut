@@ -11,6 +11,16 @@ panel that contains it.
 In the code, arguments and fields named `examined_*` refer to tested variants,
 and `excluded_*` or `outside_*` refer to omitted variants.
 
+## Acknowledgements
+
+SuSiE-OUT builds on the Sum of Single Effects (SuSiE) model of Wang, Sarkar,
+Carbonetto and Stephens (2020) and its summary-statistic extension SuSiE-RSS
+(Zou, Carbonetto, Wang and Stephens, 2022), and uses
+[`susieR`](https://github.com/stephenslab/susieR) as a reference
+implementation. We are grateful to the SuSiE authors for making their methods
+and software openly available. SuSiEOut is an independent project and is not
+affiliated with or endorsed by the SuSiE authors or the `susieR` maintainers.
+
 ## Installation
 
 ```r
@@ -77,3 +87,8 @@ For large loci, `R_analysis` may be a `Matrix` sparse matrix. The sparse backend
 avoids forming the full tested-by-tested LD matrix in dense form and supports the
 `R + dI` nuisance covariance (`infinitesimal_variance = 0`). The accompanying
 scale audit covers 120 loci with 15,000 tested variants.
+
+## Contact
+
+Josh Weinstock (josh.weinstock@emory.edu). See our other work at
+[weinstocklab.org](https://weinstocklab.org).
